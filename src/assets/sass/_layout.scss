@@ -63,67 +63,6 @@ input:focus {
             margin-bottom: 0;
             margin-top: 0;
           }
-          #timer-value {
-            font-size: 50px;
-            font-weight: bold;
-          }
-          .timer-controls {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 5px;
-            .control-item {
-              margin: 0 10px;
-              display: flex;
-              align-items: center;
-              cursor: pointer;
-              >svg {
-                font-size: 12px;
-                margin-right: 6px;
-                margin-bottom: 2px;
-              }
-            }
-          }
-        }
-      }
-    }
-    .clock-settings {
-      margin-top: 30px;
-      .settings-title {
-        display: flex;
-        align-items: center;
-        margin-bottom: 15px;
-        >hr {
-          width: 100%;
-          border: 1px solid #229E74;
-          background-color: #229E74;
-        }
-        >span {
-          padding: 3px 10px;
-          font-size: 16px;
-          background-color: $theme-color;
-          margin: 0 5px;
-          border-radius: 30px;
-          color: white;
-        }
-      }
-      .settings-items {
-        display: flex;
-        justify-content: space-around;
-        .item-title {
-          margin-bottom: 5px;
-          font-size: 14px;
-        }
-        .item-inputs {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          .input-value {
-            font-size: 20px;
-          }
-          .input-increase,
-          .input-decrease {
-            cursor: pointer;
-          }
         }
       }
     }

@@ -1,0 +1,16 @@
+.timer-controls {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 5px;
+    .control-item {
+      margin: 0 10px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      >svg {
+        font-size: 12px;
+        margin-right: 6px;
+        margin-bottom: 2px;
+      }
+    }
+  }
