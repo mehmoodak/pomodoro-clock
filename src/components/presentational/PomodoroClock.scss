@@ -9,4 +9,69 @@
 @import "./../../assets/sass/elements";
 
 /*===================================== Layout =====================================*/
-@import "./../../assets/sass/layout";
+
+input:focus {
+    outline: 0;
+  }
+  
+  .btn {
+    background-color: $theme-color;
+    transition: .5s;
+  }
+  
+  .btn-icons {
+    color: $theme-color;
+    transition: .5s;
+  }
+  
+  .btn-icons:focus {
+    outline: 0;
+  }
+  
+.clock-container {
+    margin-top: 50px;
+    .page-title {
+      color: #fff;
+      margin-bottom: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
+    .clock-wrapper {
+      margin: 30px auto 0;
+      width: 300px;
+      background-color: #fff;
+      border-radius: 3px;
+      text-align: center;
+      padding: 40px 20px;
+      #clock {
+        position: relative;
+        .CircularProgressbar {
+          width: 250px;
+          height: 250px;
+          .CircularProgressbar-path {
+            stroke: $theme-color;
+          }
+        }
+        #clock-timer {
+          position: absolute;
+          top: -1%;
+          left: 8%;
+          width: 250px;
+          height: 250px;
+          margin: 0 auto;
+          .clock-inner {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            >h2 {
+              margin-bottom: 0;
+              margin-top: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+  
+

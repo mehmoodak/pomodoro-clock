@@ -1,0 +1,10 @@
+@import './assets/sass/variables';
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: $theme-color;
+  font-family: $main-font;
+  transition: .5s;
+  color: #222;
+}
