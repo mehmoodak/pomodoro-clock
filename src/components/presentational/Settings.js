@@ -8,6 +8,10 @@ import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
 library.add(faPlus, faMinus)
 
 export default class Settings extends Component {
+    constructor(props){
+        super(props);
+
+    }
     render() {
         return (
             <div className="clock-settings">
@@ -23,7 +27,7 @@ export default class Settings extends Component {
                             <div className="input-decrease">
                                 <button id="decrease-session" className="btn-icons"><FontAwesomeIcon icon={faMinus} /></button>
                             </div>
-                            <div className="input-value">25</div>
+                            <div className="input-value">{this.props.session_length}</div>
                             <div className="input-increase">
                                 <button id="increase-session" className="btn-icons"><FontAwesomeIcon icon={faPlus} /></button>
                             </div>
@@ -35,7 +39,7 @@ export default class Settings extends Component {
                             <div className="input-decrease">
                                 <button id="decrease-break" className="btn-icons"><FontAwesomeIcon icon={faMinus} /></button>
                             </div>
-                            <div className="input-value">5</div>
+                            <div className="input-value">{this.props.break_length}</div>
                             <div className="input-increase">
                                 <button id="increase-break" className="btn-icons"><FontAwesomeIcon icon={faPlus} /></button>
                             </div>

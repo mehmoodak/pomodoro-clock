@@ -11,6 +11,22 @@ import Timer from './Timer';
 
 export default class PomodoroClock extends Component {
 
+    constructor(props){
+        super(props);
+
+        this.state = {
+            timer: {
+                minutes: null,
+                seconds: null
+            },
+            duration:{
+                session_length: 25,
+                break_length: 5
+            },
+            isPlaying: false,
+            isResume: false
+        }
+    }
     render() {
         return (
             <div>
@@ -20,7 +36,7 @@ export default class PomodoroClock extends Component {
                     <div className="clock-wrapper">
                         <div id="clock" className="clock">
                             <CircularProgressbar
-                                percentage={66}
+                                percentage={0}
                                 text={null}
                                 strokeWidth='4'
                             />
@@ -31,7 +47,7 @@ export default class PomodoroClock extends Component {
                                     <Controls/>
                                 </div>
                             </div>
-                            <Settings/>
+                            <Settings session_length={this.state.duration.session_length} break_length={this.state.duration.break_length}/>
                         </div>
                     </div>
                 </div>
