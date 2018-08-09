@@ -50,6 +50,11 @@ input:focus {
           height: 250px;
           .CircularProgressbar-path {
             stroke: $theme-color;
+            transition-duration: 0s !important;
+          }
+
+          &.break .CircularProgressbar-path {
+            stroke: #e53935;
           }
         }
         #clock-timer {

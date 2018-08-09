@@ -1,4 +1,6 @@
-import React, { Component } from 'react';
+import React, {
+    Component
+} from 'react';
 import './PomodoroClock.scss';
 import Credits from './Credits';
 import Settings from './Settings';
@@ -11,98 +13,169 @@ import Timer from './Timer';
 
 export default class PomodoroClock extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
+
+        let session_length = 2;
+        let break_length = 1;
 
         this.state = {
             timer: {
-                minutes: '25',
-                seconds: '00'
+                minutes: '' + session_length,
+                seconds: '00',
+                percentage: 0
             },
-            duration:{
-                session_length: 25,
-                break_length: 5
+            duration: {
+                session_length: session_length,
+                break_length: break_length
             },
             isPlaying: false,
             isResume: false,
             playType: 'session'
         }
 
+        this.timerRef = null;
+
         this.updateSettings = this.updateSettings.bind(this);
-        this.updateClock = this.updateClock.bind(this);
+        this.startTimer = this.startTimer.bind(this);
     }
 
-    updateSettings(type){
-        
+    updateSettings(type) {
+
         let duration = this.state.duration;
 
-        if(type === 'increase-session'){
-            duration['session_length'] += 1; 
-        }else if( type === 'decrease-session'){
+        if (type === 'increase-session') {
+            duration['session_length'] += 1;
+        } else if (type === 'decrease-session') {
             duration['session_length'] = (duration['session_length'] > 1) ? duration['session_length'] - 1 : duration['session_length'];
-        }else if( type === 'increase-break'){
-            duration['break_length'] += 1; 
-        }else if( type === 'decrease-break'){
+        } else if (type === 'increase-break') {
+            duration['break_length'] += 1;
+        } else if (type === 'decrease-break') {
             duration['break_length'] = (duration['break_length'] > 1) ? duration['break_length'] - 1 : duration['break_length'];
         }
 
-        this.setState({
-            duration: duration
-        });
 
-        this.updateClock();
+        let timer = this.updateTimer(this.state.duration.session_length, this.state.playType);
+
+        this.setState({
+            duration: duration,
+            timer,
+        });
 
     }
 
-    updateClock(){
-        this.setState({
-            timer: {
-                minutes: '' + this.state.duration.session_length, //converting to string
+    updateTimer(minutes, playType) {
+        let timer;
+        if (playType === 'session') {
+            timer = {
+                minutes: '' + minutes,
                 seconds: '00'
-            },
-            playType: 'session'
-        });
-
+            }
+            console.log("================ Session Time =================");
+        } else if (playType === 'break') {
+            timer = {
+                minutes: '' + minutes,
+                seconds: '00'
+            }
+            console.log("================ Break Time =================");
+        }
+        return timer;
     }
 
-    startTimer(){
+    startTimer() {
+        console.log("Starts");
 
+        let timer = this.updateTimer(this.state.duration.session_length, this.state.playType);
+        this.setState({
+            isPlaying: true
+        })
+
+        this.timerRef = setInterval(() => {
+
+            if (parseInt(timer['minutes'], 10) === 0 && parseInt(timer['seconds'], 10) === 0) {
+                if (this.state.playType === 'session') {
+                    this.setState({
+                        playType: 'break',
+                    });
+                    timer = this.updateTimer(this.state.duration.break_length, this.state.playType);
+                } else {
+                    this.setState({
+                        playType: 'session',
+                    });
+                    timer = this.updateTimer(this.state.duration.session_length, this.state.playType);
+                }
+            }
+            
+            if (parseInt(timer['seconds'], 10) === 0) {
+                timer['minutes']--;
+                timer['seconds'] = 59;
+            } else {
+                timer['seconds']--;
+            }
+
+            timer['percentage'] = this.getTimeElapsedPercentage(timer);
+            this.setState({
+                timer: timer
+            })
+            console.log("Minutes : ", timer.minutes, "\nSeconds : ", timer.seconds);
+        }, 100);
+    }
+
+    getTimeElapsedPercentage(timer) {
+        let totalTimeInSec, timeElapsedInSec, timeRemainingInSec;
+
+        this.state.playType === 'break'
+            ? totalTimeInSec = this.state.duration.break_length * 60
+            : totalTimeInSec = this.state.duration.session_length * 60;
+
+        timeRemainingInSec = parseInt(timer.minutes, 10) * 60 + parseInt(timer.seconds, 10);
+        timeElapsedInSec = totalTimeInSec - timeRemainingInSec;
+
+        console.log("Total Time : " + totalTimeInSec, "\nTotal Elapsed: " + timeElapsedInSec);
+
+        return timeElapsedInSec / totalTimeInSec * 100;
     }
 
     render() {
+
+        let progressBarClasses;
+
+        if (this.state.playType === 'break') {
+            progressBarClasses = 'break'
+        }else{
+            progressBarClasses = 'session';
+        }
+
         return (
             <div>
                 <div className="clock-container">
-                    <h2 className="page-title">Pomodoro Clock</h2>
-
+                    < h2 className="page-title">Pomodoro Clock</h2>
                     <div className="clock-wrapper">
                         <div id="clock" className="clock">
-                            <CircularProgressbar
-                                percentage={0}
-                                text={null}
-                                strokeWidth='4'
-                            />
+                            < CircularProgressbar initialAnimation={true} className={progressBarClasses} percentage={this.state.timer.percentage} text={null} strokeWidth='4' />
                             <div id="clock-timer">
                                 <div className="clock-inner">
-                                    <h2 id="timer-active">Session</h2>
-                                    <Timer minutes={this.state.timer.minutes} seconds={this.state.timer.seconds}/>
-                                    <Controls isPlaying={this.state.isPlaying} isResume={this.state.isResume}/>
+                                    {
+                                        this.state.playType === 'session' && < h2 id="timer-active">Session</h2>
+                                    }
+                                    {
+                                        this.state.playType === 'break' && < h2 id="timer-active">Break</h2>
+                                    }
+                                    < Timer minutes={this.state.timer.minutes} seconds={this.state.timer.seconds} />
+                                    < Controls isPlaying={this.state.isPlaying} isResume={this.state.isResume} startTimer={this.startTimer} />
                                 </div>
                             </div>
-                            <Settings 
-                                session_length={this.state.duration.session_length} break_length={this.state.duration.break_length}
-                                updateSettings={ this.updateSettings}
-                                />
+                            {
+                                !this.state.isPlaying &&
+                                < Settings session_length={this.state.duration.session_length} break_length={this.state.duration.break_length} updateSettings={this.updateSettings} />
+                            }
                         </div>
                     </div>
                 </div>
-
-                <audio id="tone">
-                    <source src="./../../assets/audio/tone.mp3" type="audio/mp3" />
-                    Your browser does not support the audio element.
-                    </audio>
-
-                <Credits/>
+                < audio id="tone">
+                    < source src="./../../assets/audio/tone.mp3" type="audio/mp3" />Your browser does not support the audio element.
+				</audio>
+                < Credits />
             </div>
         );
     }

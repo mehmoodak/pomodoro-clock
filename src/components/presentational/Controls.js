@@ -11,7 +11,7 @@ export default class Controls extends Component {
     render() {
         return (
             <div className="timer-controls">
-                <div id="play" className="control-item">
+                <div id="play" className="control-item" onClick = {() => this.props.startTimer()}>
                     <FontAwesomeIcon icon={faPlay} />
                     {
                         (!this.props.isPlaying && !this.props.isResume) &&
@@ -19,7 +19,7 @@ export default class Controls extends Component {
                     }
                     {
                         (this.props.isPlaying && !this.props.isResume) &&
-                        <span>Playing</span>
+                        <span>Stop</span>
                     }
                     {
                         (!this.props.isPlaying && this.props.isResume) &&
