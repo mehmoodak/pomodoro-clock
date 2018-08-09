@@ -1,0 +1,159 @@
+body {
+  background-color: $theme-color;
+  font-family: $main-font;
+  transition: .5s;
+  color: #222;
+}
+
+input:focus {
+  outline: 0;
+}
+
+.btn {
+  background-color: $theme-color;
+  transition: .5s;
+}
+
+.btn-icons {
+  color: $theme-color;
+  transition: .5s;
+}
+
+.btn-icons:focus {
+  outline: 0;
+}
+
+.clock-container {
+  margin-top: 50px;
+  .page-title {
+    color: #fff;
+    margin-bottom: 15px;
+    text-align: center;
+    font-weight: bold;
+  }
+  .clock-wrapper {
+    margin: 30px auto 0;
+    width: 300px;
+    background-color: #fff;
+    border-radius: 3px;
+    text-align: center;
+    padding: 40px 20px;
+    #clock {
+      position: relative;
+      .CircularProgressbar {
+        width: 250px;
+        height: 250px;
+        .CircularProgressbar-path {
+          stroke: $theme-color;
+        }
+      }
+      #clock-timer {
+        position: absolute;
+        top: -1%;
+        left: 8%;
+        width: 250px;
+        height: 250px;
+        margin: 0 auto;
+        .clock-inner {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          >h2 {
+            margin-bottom: 0;
+            margin-top: 0;
+          }
+          #timer-value {
+            font-size: 50px;
+            font-weight: bold;
+          }
+          .timer-controls {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 5px;
+            .control-item {
+              margin: 0 10px;
+              display: flex;
+              align-items: center;
+              cursor: pointer;
+              >svg {
+                font-size: 12px;
+                margin-right: 6px;
+                margin-bottom: 2px;
+              }
+            }
+          }
+        }
+      }
+    }
+    .clock-settings {
+      margin-top: 30px;
+      .settings-title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        >hr {
+          width: 100%;
+          border: 1px solid #229E74;
+          background-color: #229E74;
+        }
+        >span {
+          padding: 3px 10px;
+          font-size: 16px;
+          background-color: $theme-color;
+          margin: 0 5px;
+          border-radius: 30px;
+          color: white;
+        }
+      }
+      .settings-items {
+        display: flex;
+        justify-content: space-around;
+        .item-title {
+          margin-bottom: 5px;
+          font-size: 14px;
+        }
+        .item-inputs {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          .input-value {
+            font-size: 20px;
+          }
+          .input-increase,
+          .input-decrease {
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}
+
+.credits {
+  margin-top: 8px;
+  color: white;
+  font-size: 12px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  padding: 8px 0px;
+  left: 50%;
+  z-index: 10;
+  transform: translateX(-50%);
+  width: 100%;
+  background: $theme-color;
+}
+
+#source-link {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: white;
+  font-size: 40px;
+  @media screen and (max-width: $mobile-breakpoint) {
+    font-size: 30px;
+    top: 5px;
+    right: 5px;
+  }
+}
