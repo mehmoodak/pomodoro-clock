@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './PomodoroClock.scss';
+import Credits from './Credits';
 
 // Circular Bar 
 import CircularProgressbar from 'react-circular-progressbar';
@@ -87,9 +88,7 @@ export default class PomodoroClock extends Component {
                     Your browser does not support the audio element.
                     </audio>
 
-                <a rel="noopener noreferrer" id="source-link" target="_blank" className="btn-icons"
-                    href="https://github.com/mehmoodak/pomodoro-clock">
-                    <FontAwesomeIcon icon={['fab', 'github']}/></a>
+                <Credits/>
             </div>
         );
     }
