@@ -16,17 +16,59 @@ export default class PomodoroClock extends Component {
 
         this.state = {
             timer: {
-                minutes: null,
-                seconds: null
+                minutes: '25',
+                seconds: '00'
             },
             duration:{
                 session_length: 25,
                 break_length: 5
             },
             isPlaying: false,
-            isResume: false
+            isResume: false,
+            playType: 'session'
         }
+
+        this.updateSettings = this.updateSettings.bind(this);
+        this.updateClock = this.updateClock.bind(this);
     }
+
+    updateSettings(type){
+        
+        let duration = this.state.duration;
+
+        if(type === 'increase-session'){
+            duration['session_length'] += 1; 
+        }else if( type === 'decrease-session'){
+            duration['session_length'] = (duration['session_length'] > 1) ? duration['session_length'] - 1 : duration['session_length'];
+        }else if( type === 'increase-break'){
+            duration['break_length'] += 1; 
+        }else if( type === 'decrease-break'){
+            duration['break_length'] = (duration['break_length'] > 1) ? duration['break_length'] - 1 : duration['break_length'];
+        }
+
+        this.setState({
+            duration: duration
+        });
+
+        this.updateClock();
+
+    }
+
+    updateClock(){
+        this.setState({
+            timer: {
+                minutes: '' + this.state.duration.session_length, //converting to string
+                seconds: '00'
+            },
+            playType: 'session'
+        });
+
+    }
+
+    startTimer(){
+
+    }
+
     render() {
         return (
             <div>
@@ -43,11 +85,14 @@ export default class PomodoroClock extends Component {
                             <div id="clock-timer">
                                 <div className="clock-inner">
                                     <h2 id="timer-active">Session</h2>
-                                    <Timer/>
-                                    <Controls/>
+                                    <Timer minutes={this.state.timer.minutes} seconds={this.state.timer.seconds}/>
+                                    <Controls isPlaying={this.state.isPlaying} isResume={this.state.isResume}/>
                                 </div>
                             </div>
-                            <Settings session_length={this.state.duration.session_length} break_length={this.state.duration.break_length}/>
+                            <Settings 
+                                session_length={this.state.duration.session_length} break_length={this.state.duration.break_length}
+                                updateSettings={ this.updateSettings}
+                                />
                         </div>
                     </div>
                 </div>

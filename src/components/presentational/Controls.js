@@ -13,7 +13,18 @@ export default class Controls extends Component {
             <div className="timer-controls">
                 <div id="play" className="control-item">
                     <FontAwesomeIcon icon={faPlay} />
-                    <span>Start</span>
+                    {
+                        (!this.props.isPlaying && !this.props.isResume) &&
+                        <span>Start</span>
+                    }
+                    {
+                        (this.props.isPlaying && !this.props.isResume) &&
+                        <span>Playing</span>
+                    }
+                    {
+                        (!this.props.isPlaying && this.props.isResume) &&
+                        <span>Resume</span>
+                    }
                 </div>
                 <div id="reset" className="control-item">
                     <FontAwesomeIcon icon={faRedo} />
