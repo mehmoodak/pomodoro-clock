@@ -7,7 +7,12 @@ export default class Timer extends Component {
             <div id="timer-value" data-status="stopped">
                 <span id="minutes">{this.props.minutes}</span>
                 :
-                <span id="seconds">{this.props.seconds}</span>
+                {   
+                    this.props.seconds < 10 && <span id="seconds">{'0' + this.props.seconds}</span>
+                }
+                {   
+                    this.props.seconds >= 10 && <span id="seconds">{this.props.seconds}</span>
+                }
             </div>
         );
     }

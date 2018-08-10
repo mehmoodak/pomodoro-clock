@@ -22,7 +22,7 @@ export default class PomodoroClock extends Component {
         this.state = {
             timer: {
                 minutes: '' + session_length,
-                seconds: '00',
+                seconds: 0,
                 percentage: 0
             },
             duration: {
