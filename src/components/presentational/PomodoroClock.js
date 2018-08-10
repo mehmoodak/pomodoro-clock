@@ -84,42 +84,45 @@ export default class PomodoroClock extends Component {
     }
 
     startTimer() {
-        console.log("Starts");
 
-        let timer = this.updateTimer(this.state.duration.session_length, this.state.playType);
-        this.setState({
-            isPlaying: true
-        })
+        if (!this.state.isPlaying && !this.state.isResume) {
+            console.log("Starts");
 
-        this.timerRef = setInterval(() => {
-
-            if (parseInt(timer['minutes'], 10) === 0 && parseInt(timer['seconds'], 10) === 0) {
-                if (this.state.playType === 'session') {
-                    this.setState({
-                        playType: 'break',
-                    });
-                    timer = this.updateTimer(this.state.duration.break_length, this.state.playType);
-                } else {
-                    this.setState({
-                        playType: 'session',
-                    });
-                    timer = this.updateTimer(this.state.duration.session_length, this.state.playType);
-                }
-            }
-
-            if (parseInt(timer['seconds'], 10) === 0) {
-                timer['minutes']--;
-                timer['seconds'] = 59;
-            } else {
-                timer['seconds']--;
-            }
-
-            timer['percentage'] = this.getTimeElapsedPercentage(timer);
+            let timer = this.updateTimer(this.state.duration.session_length, this.state.playType);
             this.setState({
-                timer: timer
+                isPlaying: true
             })
-            console.log("Minutes : ", timer.minutes, "\nSeconds : ", timer.seconds);
-        }, 100);
+
+            this.timerRef = setInterval(() => {
+
+                if (parseInt(timer['minutes'], 10) === 0 && parseInt(timer['seconds'], 10) === 0) {
+                    if (this.state.playType === 'session') {
+                        this.setState({
+                            playType: 'break',
+                        });
+                        timer = this.updateTimer(this.state.duration.break_length, this.state.playType);
+                    } else {
+                        this.setState({
+                            playType: 'session',
+                        });
+                        timer = this.updateTimer(this.state.duration.session_length, this.state.playType);
+                    }
+                }
+
+                if (parseInt(timer['seconds'], 10) === 0) {
+                    timer['minutes']--;
+                    timer['seconds'] = 59;
+                } else {
+                    timer['seconds']--;
+                }
+
+                timer['percentage'] = this.getTimeElapsedPercentage(timer);
+                this.setState({
+                    timer: timer
+                })
+                console.log("Minutes : ", timer.minutes, "\nSeconds : ", timer.seconds);
+            }, 100);
+        }
     }
 
     getTimeElapsedPercentage(timer) {
