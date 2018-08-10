@@ -11,21 +11,28 @@ export default class Controls extends Component {
     render() {
         return (
             <div className="timer-controls">
-                <div id="play" className="control-item" onClick = {() => this.props.startTimer()}>
-                    <FontAwesomeIcon icon={faPlay} />
-                    {
-                        (!this.props.isPlaying && !this.props.isResume) &&
+                {
+                    (!this.props.isPlaying && !this.props.isResume) &&
+                    <div className="control-item" onClick={() => this.props.startTimer()}>
+                        <FontAwesomeIcon icon={faPlay} />
                         <span>Start</span>
-                    }
-                    {
-                        (this.props.isPlaying && !this.props.isResume) &&
+                    </div>
+
+                }
+                {
+                    (this.props.isPlaying && !this.props.isResume) &&
+                    <div className="control-item" onClick={() => this.props.stopTimer()}>
+                        <FontAwesomeIcon icon={faPlay} />
                         <span>Stop</span>
-                    }
-                    {
-                        (!this.props.isPlaying && this.props.isResume) &&
+                    </div>
+                }
+                {
+                    (!this.props.isPlaying && this.props.isResume) &&
+                    <div className="control-item" onClick={() => this.props.resumeTimer()}>
+                        <FontAwesomeIcon icon={faPlay} />
                         <span>Resume</span>
-                    }
-                </div>
+                    </div>
+                }
                 <div id="reset" className="control-item" onClick={() => this.props.reset()}>
                     <FontAwesomeIcon icon={faRedo} />
                     <span>Reset</span>
