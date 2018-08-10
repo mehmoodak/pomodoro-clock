@@ -6,6 +6,7 @@ import Settings from './Settings';
 import Controls from './Controls';
 import Timer from './Timer';
 import Source from './Source';
+import audio from "./../../assets/audio/tone.mp3";
 
 // Circular Bar 
 import CircularProgressbar from 'react-circular-progressbar';
@@ -97,6 +98,7 @@ export default class PomodoroClock extends Component {
      * Return new timer object and update playType based on the timer selected before
      */
     changeTimerType() {
+        this.playAudio();
         if (this.state.playType === 'session') {
             this.setState({
                 playType: 'break',
@@ -136,11 +138,15 @@ export default class PomodoroClock extends Component {
         })
     }
 
+    playAudio(){
+        document.getElementById('tone').play();
+    }
+
     /**
      * Starts the timer of pomodoro clock
      */
     start() {
-
+        this.playAudio();
         if (!this.state.isPlaying && !this.state.isStop) {
 
             this.setState({
@@ -163,7 +169,7 @@ export default class PomodoroClock extends Component {
             }
 
             this.updateTimer(timer)
-        }, 30);
+        }, 1000);
     }
 
     /**
@@ -267,7 +273,7 @@ export default class PomodoroClock extends Component {
                     </div>
                 </div>
                 <audio id="tone">
-                    <source src="./../../assets/audio/tone.mp3" type="audio/mp3" /> Your browser does not support the audio element. </audio>
+                    <source src={audio} type="audio/mp3" /> Your browser does not support the audio element. </audio>
                 <Source />
             </div>
         );
