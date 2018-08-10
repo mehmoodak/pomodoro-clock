@@ -38,6 +38,7 @@ export default class PomodoroClock extends Component {
 
         this.updateSettings = this.updateSettings.bind(this);
         this.startTimer = this.startTimer.bind(this);
+        this.reset = this.reset.bind(this);
     }
 
     updateSettings(type) {
@@ -69,13 +70,13 @@ export default class PomodoroClock extends Component {
         if (playType === 'session') {
             timer = {
                 minutes: '' + minutes,
-                seconds: '00'
+                seconds: '0'
             }
             console.log("================ Session Time =================");
         } else if (playType === 'break') {
             timer = {
                 minutes: '' + minutes,
-                seconds: '00'
+                seconds: '0'
             }
             console.log("================ Break Time =================");
         }
@@ -105,7 +106,7 @@ export default class PomodoroClock extends Component {
                     timer = this.updateTimer(this.state.duration.session_length, this.state.playType);
                 }
             }
-            
+
             if (parseInt(timer['seconds'], 10) === 0) {
                 timer['minutes']--;
                 timer['seconds'] = 59;
@@ -124,9 +125,9 @@ export default class PomodoroClock extends Component {
     getTimeElapsedPercentage(timer) {
         let totalTimeInSec, timeElapsedInSec, timeRemainingInSec;
 
-        this.state.playType === 'break'
-            ? totalTimeInSec = this.state.duration.break_length * 60
-            : totalTimeInSec = this.state.duration.session_length * 60;
+        this.state.playType === 'break' ?
+            totalTimeInSec = this.state.duration.break_length * 60 :
+            totalTimeInSec = this.state.duration.session_length * 60;
 
         timeRemainingInSec = parseInt(timer.minutes, 10) * 60 + parseInt(timer.seconds, 10);
         timeElapsedInSec = totalTimeInSec - timeRemainingInSec;
@@ -136,46 +137,57 @@ export default class PomodoroClock extends Component {
         return timeElapsedInSec / totalTimeInSec * 100;
     }
 
+    reset() {
+        if (this.state.isPlaying || this.state.isResume) {
+            console.log("=============== Reset =============== ")
+            let timer = this.updateTimer(this.state.duration.session_length, this.state.playType);
+            timer['percentage'] = this.getTimeElapsedPercentage(timer);
+
+            this.setState({
+                timer: timer,
+                isPlaying: false,
+                isResume: false,
+                playType: 'session'
+            });
+
+            window.clearInterval(this.timerRef);
+        }
+    }
+
     render() {
 
         let progressBarClasses;
 
         if (this.state.playType === 'break') {
             progressBarClasses = 'break'
-        }else{
+        } else {
             progressBarClasses = 'session';
         }
 
         return (
             <div>
                 <div className="clock-container">
-                    < h2 className="page-title">Pomodoro Clock</h2>
+                    <h2 className="page-title"> Pomodoro Clock </h2>
                     <div className="clock-wrapper">
                         <div id="clock" className="clock">
-                            < CircularProgressbar initialAnimation={true} className={progressBarClasses} percentage={this.state.timer.percentage} text={null} strokeWidth='4' />
+                            <CircularProgressbar initialAnimation={true} className={progressBarClasses} percentage={this.state.timer.percentage} text={null} strokeWidth='4' />
                             <div id="clock-timer">
-                                <div className="clock-inner">
-                                    {
-                                        this.state.playType === 'session' && < h2 id="timer-active">Session</h2>
+                                <div className="clock-inner"> {this.state.playType === 'session' &&
+                                    <h2 id="timer-active"> Session</h2>
+                                } {this.state.playType === 'break' &&
+                                    <h2 id="timer-active"> Break </h2>
                                     }
-                                    {
-                                        this.state.playType === 'break' && < h2 id="timer-active">Break</h2>
-                                    }
-                                    < Timer minutes={this.state.timer.minutes} seconds={this.state.timer.seconds} />
-                                    < Controls isPlaying={this.state.isPlaying} isResume={this.state.isResume} startTimer={this.startTimer} />
+                                    <Timer minutes={this.state.timer.minutes} seconds={this.state.timer.seconds} />
+                                    <Controls isPlaying={this.state.isPlaying} isResume={this.state.isResume} startTimer={this.startTimer} reset={this.reset} />
                                 </div>
-                            </div>
-                            {
-                                !this.state.isPlaying &&
-                                < Settings session_length={this.state.duration.session_length} break_length={this.state.duration.break_length} updateSettings={this.updateSettings} />
-                            }
+                            </div> {!this.state.isPlaying &&
+                                <Settings session_length={this.state.duration.session_length} break_length={this.state.duration.break_length} updateSettings={this.updateSettings} />}
                         </div>
                     </div>
                 </div>
                 < audio id="tone">
-                    < source src="./../../assets/audio/tone.mp3" type="audio/mp3" />Your browser does not support the audio element.
-				</audio>
-                < Credits />
+                    <source src="./../../assets/audio/tone.mp3" type="audio/mp3" /> Your browser does not support the audio element. </audio>
+                <Credits />
             </div>
         );
     }

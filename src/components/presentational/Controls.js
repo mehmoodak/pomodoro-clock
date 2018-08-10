@@ -26,7 +26,7 @@ export default class Controls extends Component {
                         <span>Resume</span>
                     }
                 </div>
-                <div id="reset" className="control-item">
+                <div id="reset" className="control-item" onClick={() => this.props.reset()}>
                     <FontAwesomeIcon icon={faRedo} />
                     <span>Reset</span>
                 </div>
