@@ -45,26 +45,28 @@ export default class PomodoroClock extends Component {
 
     updateSettings(type) {
 
-        let duration = this.state.duration;
+        if (!this.state.isPlaying) {
 
-        if (type === 'increase-session') {
-            duration['session_length'] += 1;
-        } else if (type === 'decrease-session') {
-            duration['session_length'] = (duration['session_length'] > 1) ? duration['session_length'] - 1 : duration['session_length'];
-        } else if (type === 'increase-break') {
-            duration['break_length'] += 1;
-        } else if (type === 'decrease-break') {
-            duration['break_length'] = (duration['break_length'] > 1) ? duration['break_length'] - 1 : duration['break_length'];
+            let duration = this.state.duration;
+
+            if (type === 'increase-session') {
+                duration['session_length'] += 1;
+            } else if (type === 'decrease-session') {
+                duration['session_length'] = (duration['session_length'] > 1) ? duration['session_length'] - 1 : duration['session_length'];
+            } else if (type === 'increase-break') {
+                duration['break_length'] += 1;
+            } else if (type === 'decrease-break') {
+                duration['break_length'] = (duration['break_length'] > 1) ? duration['break_length'] - 1 : duration['break_length'];
+            }
+
+
+            let timer = this.updateTimer(this.state.duration.session_length, '0', this.state.playType);
+            timer['percentage'] = this.getTimeElapsedPercentage(timer);
+            this.setState({
+                duration: duration,
+                timer,
+            });
         }
-
-
-        let timer = this.updateTimer(this.state.duration.session_length, '0', this.state.playType);
-
-        this.setState({
-            duration: duration,
-            timer,
-        });
-
     }
 
     updateTimer(minutes, seconds, playType) {
@@ -169,7 +171,7 @@ export default class PomodoroClock extends Component {
         }
     }
 
-    resumeTimer(){
+    resumeTimer() {
         if (this.state.isResume) {
             console.log("Resume");
 

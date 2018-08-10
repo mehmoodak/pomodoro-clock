@@ -33,10 +33,13 @@ export default class Controls extends Component {
                         <span>Resume</span>
                     </div>
                 }
-                <div id="reset" className="control-item" onClick={() => this.props.reset()}>
-                    <FontAwesomeIcon icon={faRedo} />
-                    <span>Reset</span>
-                </div>
+                {
+                    (this.props.isPlaying || this.props.isResume) &&
+                    <div id="reset" className="control-item" onClick={() => this.props.reset()}>
+                        <FontAwesomeIcon icon={faRedo} />
+                        <span>Reset</span>
+                    </div>
+                }
             </div>
         );
     }
