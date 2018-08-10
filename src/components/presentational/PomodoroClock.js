@@ -52,11 +52,11 @@ export default class PomodoroClock extends Component {
             if (type === 'increase-session') {
                 duration['session_length'] += 1;
             } else if (type === 'decrease-session') {
-                duration['session_length'] = (duration['session_length'] > 1) ? duration['session_length'] - 1 : duration['session_length'];
+                (duration['session_length'] > 1) ? duration['session_length'] -= 1 : alert("Times less than 1 minutes is not allowed.");
             } else if (type === 'increase-break') {
                 duration['break_length'] += 1;
             } else if (type === 'decrease-break') {
-                duration['break_length'] = (duration['break_length'] > 1) ? duration['break_length'] - 1 : duration['break_length'];
+                (duration['break_length'] > 1) ? duration['break_length'] -= 1 : alert("Times less than 1 minutes is not allowed.");
             }
 
 
