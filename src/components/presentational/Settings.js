@@ -7,6 +7,9 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
 library.add(faPlus, faMinus)
 
+/**
+ * Manages the settings of the clock (i.e. session and break time)
+ */
 export default class Settings extends Component {
     render() {
         return (
