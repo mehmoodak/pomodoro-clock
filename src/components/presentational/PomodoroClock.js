@@ -169,7 +169,7 @@ export default class PomodoroClock extends Component {
             }
 
             this.updateTimer(timer)
-        }, 1000);
+        }, 30);
     }
 
     /**
