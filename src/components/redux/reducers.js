@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import {
     INCREASE_SESSION, INCREASE_BREAK, DECREASE_SESSION, DECREASE_BREAK, RESET, SET_TIMER, SET_IS_PLAYING, SET_IS_RESUME, SET_PLAY_TYPE
-} from 'actionTypes';
+} from './actionTypes';
 
 
 const initialState = {
@@ -18,7 +18,7 @@ const initialState = {
     playType: 'session'
 }
 
-function changeSession(state = initialState, action) {
+function changeSession(state = initialState.duration.session_length, action) {
     switch (action.type) {
         case INCREASE_SESSION:
             return Object.assign({}, state, {
@@ -43,7 +43,7 @@ function changeSession(state = initialState, action) {
     }
 }
 
-function changeBreak(state = initialState, action) {
+function changeBreak(state = initialState.duration.break_length, action) {
     switch (action.type) {
         case INCREASE_BREAK:
             return Object.assign({}, state, {
@@ -68,7 +68,7 @@ function changeBreak(state = initialState, action) {
     }
 }
 
-function setTimer(state = initialState, action) {
+function setTimer(state = initialState.timer, action) {
     switch (action.type) {
         case SET_TIMER:
             return Object.assign({}, state, {
@@ -79,7 +79,7 @@ function setTimer(state = initialState, action) {
     }
 }
 
-function setIsPlaying(state = initialState, action) {
+function setIsPlaying(state = initialState.isPlaying, action) {
     switch (action.type) {
         case SET_IS_PLAYING:
             return Object.assign({}, state, {
@@ -90,7 +90,7 @@ function setIsPlaying(state = initialState, action) {
     }
 }
 
-function setIsResume(state = initialState, action) {
+function setIsResume(state = initialState.isResume, action) {
     switch (action.type) {
         case SET_IS_RESUME:
             return Object.assign({}, state, {
@@ -101,11 +101,11 @@ function setIsResume(state = initialState, action) {
     }
 }
 
-function setPlayType(state = initialState, action) {
+function setPlayType(state = initialState.playType, action) {
     switch (action.type) {
         case SET_PLAY_TYPE:
             return Object.assign({}, state, {
-                playType: playType
+                playType: action.playType
             });
         default:
             return state;
@@ -128,8 +128,8 @@ function reset(state = initialState, action) {
 
 const pomodoroClock = combineReducers({
     duration : combineReducers({
-        changeSession,
-        changeBreak
+        session_length: changeSession,
+        break_length: changeBreak
     }),
     timer: setTimer,
     isPlaying: setIsPlaying,
