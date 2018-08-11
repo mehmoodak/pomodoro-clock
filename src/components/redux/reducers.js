@@ -84,20 +84,6 @@ function setPlayType(playType = initialState.playType, action) {
     }
 }
 
-function reset(state = initialState, action) {
-    switch (action.type) {
-        case RESET:
-            return Object.assign({}, state, {
-                timer: {
-                    minutes: state.duration.session_length,
-                    seconds: 0
-                }
-            });
-        default:
-            return state;
-    }
-}
-
 const pomodoroClock = combineReducers({
     duration: combineReducers({
         session_length: changeSession,

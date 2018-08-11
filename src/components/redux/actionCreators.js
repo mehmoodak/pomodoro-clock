@@ -26,12 +26,6 @@ export function decreaseBreak() {
     }
 }
 
-export function reset() {
-    return {
-        type: RESET
-    }
-}
-
 export function setTimer(timer){
     return {
         type: SET_TIMER,
