@@ -1,5 +1,5 @@
 import {
-    INCREASE_SESSION, DECREASE_SESSION, INCREASE_BREAK, DECREASE_BREAK, RESET, SET_TIMER, SET_IS_PLAYING, SET_IS_RESUME, SET_PLAY_TYPE
+    INCREASE_SESSION, DECREASE_SESSION, INCREASE_BREAK, DECREASE_BREAK, SET_TIMER, SET_IS_PLAYING, SET_IS_RESUME, SET_PLAY_TYPE
 } from './actionTypes';
 
 export function increaseSession() {
@@ -23,12 +23,6 @@ export function increaseBreak() {
 export function decreaseBreak() {
     return {
         type: DECREASE_BREAK
-    }
-}
-
-export function reset() {
-    return {
-        type: RESET
     }
 }
 
