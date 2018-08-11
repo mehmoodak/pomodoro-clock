@@ -18,97 +18,69 @@ const initialState = {
     playType: 'session'
 }
 
-function changeSession(state = initialState.duration.session_length, action) {
+function changeSession(session_length = initialState.duration.session_length, action) {
     switch (action.type) {
         case INCREASE_SESSION:
-            return Object.assign({}, state, {
-                duration: {
-                    session_length: state.duration.session_length + 1,
-                    break_length: state.duration.break_length
-                }
-            });
+            return session_length + 1;
         case DECREASE_SESSION:
-            if (state.duration.session_length > 1) {
-                return Object.assign({}, state, {
-                    duration: {
-                        session_length: state.duration.session_length - 1,
-                        break_length: state.duration.break_length
-                    }
-                });
+            if (session_length > 1) {
+                return session_length - 1;
             } else {
-                return state;
+                return session_length;
             }
         default:
-            return state;
+            return session_length;
     }
 }
 
-function changeBreak(state = initialState.duration.break_length, action) {
+function changeBreak(break_length = initialState.duration.break_length, action) {
     switch (action.type) {
         case INCREASE_BREAK:
-            return Object.assign({}, state, {
-                duration: {
-                    session_length: state.duration.session_length,
-                    break_length: state.duration.break_length + 1
-                }
-            });
+            return break_length + 1;
         case DECREASE_BREAK:
-            if (state.duration.break_length > 1) {
-                return Object.assign({}, state, {
-                    duration: {
-                        session_length: state.duration.session_length,
-                        break_length: state.duration.break_length - 1
-                    }
-                });
+            if (break_length > 1) {
+                return break_length - 1;
             } else {
-                return state;
+                return break_length;
             }
         default:
-            return state;
+            return break_length;
     }
 }
 
-function setTimer(state = initialState.timer, action) {
+function setTimer(timer = initialState.timer, action) {
     switch (action.type) {
         case SET_TIMER:
-            return Object.assign({}, state, {
-                timer: action.timer
-            });
+            return action.timer;
         default:
-            return state;
+            return timer;
     }
 }
 
-function setIsPlaying(state = initialState.isPlaying, action) {
+function setIsPlaying(isPlaying = initialState.isPlaying, action) {
     switch (action.type) {
         case SET_IS_PLAYING:
-            return Object.assign({}, state, {
-                isPlaying: action.isPlaying
-            });
+            return action.isPlaying;
         default:
-            return state;
+            return isPlaying;
     }
 }
 
-function setIsResume(state = initialState.isResume, action) {
+function setIsResume(isResume = initialState.isResume, action) {
     switch (action.type) {
         case SET_IS_RESUME:
-            return Object.assign({}, state, {
-                isResume: action.isResume
-            });
+            return action.isResume
         default:
-            return state;
+            return isResume;
     }
 }
 
-function setPlayType(state = initialState.playType, action) {
+function setPlayType(playType = initialState.playType, action) {
     switch (action.type) {
         case SET_PLAY_TYPE:
-            return Object.assign({}, state, {
-                playType: action.playType
-            });
+            return action.playType;
         default:
-            return state;
+            return playType;
     }
 }
 
@@ -127,7 +99,7 @@ function reset(state = initialState, action) {
 }
 
 const pomodoroClock = combineReducers({
-    duration : combineReducers({
+    duration: combineReducers({
         session_length: changeSession,
         break_length: changeBreak
     }),
