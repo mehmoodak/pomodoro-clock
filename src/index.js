@@ -1,6 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.scss';
-import PomodoroClock from './components/presentational/PomodoroClock';
+import PomodoroClockContainer from './components/container/PomodoroClockContainer';
+import { Provider } from 'react-redux';
+import store from './redux/store'
 
-ReactDOM.render(<PomodoroClock/>, document.getElementById('root'));
+ReactDOM.render(
+    <Provider store={store}>
+        <PomodoroClockContainer/>
+    </Provider>, 
+    document.getElementById('root'));

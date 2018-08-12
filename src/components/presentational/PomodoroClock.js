@@ -7,6 +7,7 @@ import Controls from './Controls';
 import Timer from './Timer';
 import Source from './Source';
 import audio from "./../../assets/audio/tone.mp3";
+import store from './../../redux/store';
 
 // Circular Bar 
 import CircularProgressbar from 'react-circular-progressbar';
@@ -16,27 +17,7 @@ export default class PomodoroClock extends Component {
 
     constructor(props) {
         super(props);
-
-        let session_length = 2;
-        let break_length = 1;
-
-        this.state = {
-            timer: {
-                minutes: session_length,
-                seconds: 0,
-                percentage: 0
-            },
-            duration: {
-                session_length: session_length,
-                break_length: break_length
-            },
-            isPlaying: false,
-            isStop: false,
-            playType: 'session'
-        }
-
         this.timerRef = null; // track our interval reference
-
         this.updateSettings = this.updateSettings.bind(this);
         this.start = this.start.bind(this);
         this.startTimer = this.startTimer.bind(this);
@@ -52,34 +33,31 @@ export default class PomodoroClock extends Component {
      */
     updateSettings(type) {
 
-        if (!this.state.isPlaying) {
+        if (!this.props.isPlaying) {
 
-            let duration = this.state.duration;
             let isInvalid = false; // to show alert if user input is invalid
 
             if (type === 'increase-session') {
-                duration['session_length'] += 1;
+                this.props.increaseSession();
             } else if (type === 'decrease-session') {
-                (duration['session_length'] > 1) ? duration['session_length'] -= 1 : isInvalid = true;
+                (this.props.session_length > 1) ? this.props.decreaseSession() : isInvalid = true;
             } else if (type === 'increase-break') {
-                duration['break_length'] += 1;
+                this.props.increaseBreak();
             } else if (type === 'decrease-break') {
-                (duration['break_length'] > 1) ? duration['break_length'] -= 1 : isInvalid = true;
+                (this.props.break_length > 1) ? this.props.decreaseBreak() : isInvalid = true;
             }
 
             if (isInvalid) {
                 alert("Times less than 1 minutes is not allowed.");
             } else {
-                this.setState({
-                    isPlaying: false,
-                    isStop: false,
-                    duration: duration,
-                    timer: {
-                        minutes: this.state.duration.session_length,
-                        seconds: '0',
-                        percentage: this.getTimeElapsedPercentage(this.state.duration.session_length, 0)
-                    }
-                });
+                if (type === 'increase-session' || type === 'decrease-session') {
+                    // using store.getState() because props only update after each render
+                    this.props.setTimer({
+                        minutes: store.getState().duration.session_length,
+                        seconds: 0,
+                        percentage: this.getTimeElapsedPercentage(store.getState().duration.session_length, 0)
+                    });
+                }
             }
         }
     }
@@ -99,23 +77,19 @@ export default class PomodoroClock extends Component {
      */
     changeTimerType() {
         this.playAudio();
-        if (this.state.playType === 'session') {
-            this.setState({
-                playType: 'break',
-            });
+        if (this.props.playType === 'session') {
+            this.props.setPlayType('break');
             return {
-                minutes: this.state.duration.break_length,
+                minutes: this.props.break_length,
                 seconds: '0',
-                percentage: this.getTimeElapsedPercentage(this.state.duration.break_length, 0)
+                percentage: this.getTimeElapsedPercentage(this.props.break_length, 0)
             }
         } else {
-            this.setState({
-                playType: 'session',
-            });
+            this.props.setPlayType('session');
             return {
-                minutes: this.state.duration.session_length,
+                minutes: this.props.session_length,
                 seconds: '0',
-                percentage: this.getTimeElapsedPercentage(this.state.duration.session_length, 0)
+                percentage: this.getTimeElapsedPercentage(this.props.session_length, 0)
             }
         }
     }
@@ -133,12 +107,10 @@ export default class PomodoroClock extends Component {
         }
 
         timer['percentage'] = this.getTimeElapsedPercentage(timer.minutes, timer.seconds);
-        this.setState({
-            timer: timer
-        })
+        this.props.setTimer(timer);
     }
 
-    playAudio(){
+    playAudio() {
         document.getElementById('tone').play();
     }
 
@@ -146,14 +118,10 @@ export default class PomodoroClock extends Component {
      * Starts the timer of pomodoro clock
      */
     start() {
-        this.playAudio();
-        if (!this.state.isPlaying && !this.state.isStop) {
-
-            this.setState({
-                isPlaying: true
-            })
-
-            this.startTimer(this.state.timer);
+        if (!this.props.isPlaying && !this.props.isResume) {
+            this.playAudio();
+            this.props.setIsPlaying(true);
+            this.startTimer(this.props.timer);
         }
     }
 
@@ -169,7 +137,7 @@ export default class PomodoroClock extends Component {
             }
 
             this.updateTimer(timer)
-        }, 30);
+        }, 100);
     }
 
     /**
@@ -180,9 +148,9 @@ export default class PomodoroClock extends Component {
     getTimeElapsedPercentage(minutes, seconds) {
         let totalTimeInSec, timeElapsedInSec, timeRemainingInSec;
 
-        this.state.playType === 'break' ?
-            totalTimeInSec = this.state.duration.break_length * 60 :
-            totalTimeInSec = this.state.duration.session_length * 60;
+        this.props.playType === 'break' ?
+            totalTimeInSec = store.getState().duration.break_length * 60 :
+            totalTimeInSec = store.getState().duration.session_length * 60;
 
         timeRemainingInSec = minutes * 60 + seconds;
         timeElapsedInSec = totalTimeInSec - timeRemainingInSec;
@@ -194,17 +162,15 @@ export default class PomodoroClock extends Component {
      * Resets the Pomodoro Clock
      */
     reset() {
-        if (this.state.isPlaying || this.state.isStop) { // only reset if playing or resume
+        if (this.props.isPlaying || this.props.isResume) { // only reset if playing or resume
 
-            this.setState({
-                timer: {
-                    minutes: this.state.duration.session_length,
-                    seconds: '0',
-                    percentage: '0'
-                },
-                isPlaying: false,
-                isStop: false,
-                playType: 'session'
+            this.props.setIsPlaying(false);
+            this.props.setIsResume(false);
+            this.props.setPlayType('session');
+            this.props.setTimer({
+                minutes: this.props.session_length,
+                seconds: 0,
+                percentage: 0
             });
 
             window.clearInterval(this.timerRef);
@@ -215,12 +181,10 @@ export default class PomodoroClock extends Component {
      * Stops the Pomodoro Clock
      */
     stop() {
-        if (this.state.isPlaying) {
+        if (this.props.isPlaying) {
             window.clearInterval(this.timerRef);
-            this.setState({
-                isPlaying: false,
-                isStop: true
-            });
+            this.props.setIsPlaying(false);
+            this.props.setIsResume(true);
         }
     }
 
@@ -228,21 +192,18 @@ export default class PomodoroClock extends Component {
      * Resumes the Pomodoro Clock
      */
     resume() {
-        if (this.state.isStop) {
+        if (this.props.isResume) {
 
-            this.setState({
-                isPlaying: true,
-                isStop: false
-            });
-
-            this.startTimer(this.state.timer)
+            this.props.setIsPlaying(true);
+            this.props.setIsResume(false);
+            this.startTimer(this.props.timer)
         }
     }
 
     render() {
 
         // add class based on type which manage styling of progressBar
-        let progressBarClasses = (this.state.playType === 'break') ? 'break' : 'session';
+        let progressBarClasses = (this.props.playType === 'break') ? 'break' : 'session';
 
         return (
             <div>
@@ -250,14 +211,14 @@ export default class PomodoroClock extends Component {
                     <h2 className="page-title"> Pomodoro Clock </h2>
                     <div className="clock-wrapper">
                         <div id="clock" className="clock">
-                            <CircularProgressbar initialAnimation={true} className={progressBarClasses} percentage={this.state.timer.percentage} text={null} strokeWidth='4' />
+                            <CircularProgressbar initialAnimation={true} className={progressBarClasses} percentage={this.props.timer.percentage} text={null} strokeWidth='4' />
                             <div id="clock-timer">
                                 <div className="clock-inner">
-                                    <h2 id="timer-active"> {this.state.playType === 'session' ? 'Session' : 'Break'}</h2>
-                                    <Timer minutes={this.state.timer.minutes} seconds={this.state.timer.seconds} />
+                                    <h2 id="timer-active"> {this.props.playType === 'session' ? 'Session' : 'Break'}</h2>
+                                    <Timer minutes={this.props.timer.minutes} seconds={this.props.timer.seconds} />
                                     <Controls
-                                        isPlaying={this.state.isPlaying}
-                                        isStop={this.state.isStop}
+                                        isPlaying={this.props.isPlaying}
+                                        isStop={this.props.isResume}
                                         startTimer={this.start}
                                         stopTimer={this.stop}
                                         resumeTimer={this.resume}
@@ -265,8 +226,8 @@ export default class PomodoroClock extends Component {
                                 </div>
                             </div>
                             {
-                                !this.state.isPlaying ?
-                                    <Settings session_length={this.state.duration.session_length} break_length={this.state.duration.break_length} updateSettings={this.updateSettings} /> :
+                                !this.props.isPlaying ?
+                                    <Settings session_length={this.props.session_length} break_length={this.props.break_length} updateSettings={this.updateSettings} /> :
                                     null
                             }
                         </div>
