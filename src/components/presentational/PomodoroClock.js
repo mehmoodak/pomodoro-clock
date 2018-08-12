@@ -118,7 +118,7 @@ export default class PomodoroClock extends Component {
      * Starts the timer of pomodoro clock
      */
     start() {
-        if (!this.props.isPlaying && !this.props.isResume) {
+        if (!this.props.isPlaying && !this.props.isStop) {
             this.playAudio();
             this.props.setIsPlaying(true);
             this.startTimer(this.props.timer);
@@ -162,10 +162,10 @@ export default class PomodoroClock extends Component {
      * Resets the Pomodoro Clock
      */
     reset() {
-        if (this.props.isPlaying || this.props.isResume) { // only reset if playing or resume
+        if (this.props.isPlaying || this.props.isStop) { // only reset if playing or resume
 
             this.props.setIsPlaying(false);
-            this.props.setIsResume(false);
+            this.props.setIsStop(false);
             this.props.setPlayType('session');
             this.props.setTimer({
                 minutes: this.props.session_length,
@@ -184,7 +184,7 @@ export default class PomodoroClock extends Component {
         if (this.props.isPlaying) {
             window.clearInterval(this.timerRef);
             this.props.setIsPlaying(false);
-            this.props.setIsResume(true);
+            this.props.setIsStop(true);
         }
     }
 
@@ -192,10 +192,10 @@ export default class PomodoroClock extends Component {
      * Resumes the Pomodoro Clock
      */
     resume() {
-        if (this.props.isResume) {
+        if (this.props.isStop) {
 
             this.props.setIsPlaying(true);
-            this.props.setIsResume(false);
+            this.props.setIsStop(false);
             this.startTimer(this.props.timer)
         }
     }
@@ -218,7 +218,7 @@ export default class PomodoroClock extends Component {
                                     <Timer minutes={this.props.timer.minutes} seconds={this.props.timer.seconds} />
                                     <Controls
                                         isPlaying={this.props.isPlaying}
-                                        isStop={this.props.isResume}
+                                        isStop={this.props.isStop}
                                         startTimer={this.start}
                                         stopTimer={this.stop}
                                         resumeTimer={this.resume}

@@ -15,7 +15,7 @@ const initialState = {
         percentage: 0
     },
     isPlaying: false,
-    isResume: false,
+    isStop: false,
     playType: 'session'
 }
 
@@ -67,12 +67,12 @@ function setIsPlaying(isPlaying = initialState.isPlaying, action) {
     }
 }
 
-function setIsResume(isResume = initialState.isResume, action) {
+function setIsStop(isStop = initialState.isStop, action) {
     switch (action.type) {
         case SET_IS_RESUME:
-            return action.isResume
+            return action.isStop
         default:
-            return isResume;
+            return isStop;
     }
 }
 
@@ -92,7 +92,7 @@ const pomodoroClock = combineReducers({
     }),
     timer: setTimer,
     isPlaying: setIsPlaying,
-    isResume: setIsResume,
+    isStop: setIsStop,
     playType: setPlayType
 });
 

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import PomodoroClock from './../presentational/PomodoroClock';
 import {
-    increaseSession, increaseBreak, decreaseSession, decreaseBreak, setIsPlaying, setIsResume, setPlayType, setTimer
+    increaseSession, increaseBreak, decreaseSession, decreaseBreak, setIsPlaying, setIsStop, setPlayType, setTimer
 } from './../../redux/actionCreators';
 
 
@@ -12,7 +12,7 @@ const mapStateToProps = (state, ownProps) => {
         timer: state.timer,
         playType: state.playType,
         isPlaying: state.isPlaying,
-        isResume: state.isResume
+        isStop: state.isStop
     }
 }
 
@@ -23,7 +23,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         "increaseBreak": () => dispatch(increaseBreak()),
         "decreaseBreak": () => dispatch(decreaseBreak()),
         "setIsPlaying": (isPlaying) => dispatch(setIsPlaying(isPlaying)),
-        "setIsResume": (isResume) => dispatch(setIsResume(isResume)),
+        "setIsStop": (isStop) => dispatch(setIsStop(isStop)),
         "setPlayType": (playType) => dispatch(setPlayType(playType)),
         "setTimer": (timer) => dispatch(setTimer(timer))
     }

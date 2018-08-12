@@ -40,10 +40,10 @@ export function setIsPlaying(isPlaying){
     }
 }
 
-export function setIsResume(isResume){
+export function setIsStop(isStop){
     return {
         type: SET_IS_RESUME,
-        isResume
+        isStop
     }
 }
 
