@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import {
-    INCREASE_SESSION, INCREASE_BREAK, DECREASE_SESSION, DECREASE_BREAK, RESET, SET_TIMER, SET_IS_PLAYING, SET_IS_RESUME, SET_PLAY_TYPE
+    INCREASE_SESSION, INCREASE_BREAK, DECREASE_SESSION, DECREASE_BREAK, SET_TIMER, SET_IS_PLAYING, SET_IS_RESUME, SET_PLAY_TYPE
 } from './actionTypes';
 
 
@@ -11,7 +11,8 @@ const initialState = {
     },
     timer: {
         minutes: 25,
-        seconds: 0
+        seconds: 0,
+        percentage: 0
     },
     isPlaying: false,
     isResume: false,
