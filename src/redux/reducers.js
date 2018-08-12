@@ -52,7 +52,7 @@ function changeBreak(break_length = initialState.duration.break_length, action) 
 function setTimer(timer = initialState.timer, action) {
     switch (action.type) {
         case SET_TIMER:
-            return action.timer;
+            return Object.assign({}, timer, action.timer);
         default:
             return timer;
     }
