@@ -7,7 +7,6 @@ import Controls from './Controls';
 import Timer from './Timer';
 import Source from './Source';
 import audio from "./../../assets/audio/tone.mp3";
-import store from './../../redux/store';
 
 // Circular Bar 
 import CircularProgressbar from 'react-circular-progressbar';
@@ -49,15 +48,6 @@ export default class PomodoroClock extends Component {
 
             if (isInvalid) {
                 alert("Times less than 1 minutes is not allowed.");
-            } else {
-                if (type === 'increase-session' || type === 'decrease-session') {
-                    // using store.getState() because props only update after each render
-                    this.props.setTimer({
-                        minutes: store.getState().duration.session_length,
-                        seconds: 0,
-                        percentage: this.getTimeElapsedPercentage(store.getState().duration.session_length, 0)
-                    });
-                }
             }
         }
     }
@@ -149,8 +139,8 @@ export default class PomodoroClock extends Component {
         let totalTimeInSec, timeElapsedInSec, timeRemainingInSec;
 
         this.props.playType === 'break' ?
-            totalTimeInSec = store.getState().duration.break_length * 60 :
-            totalTimeInSec = store.getState().duration.session_length * 60;
+            totalTimeInSec = this.props.break_length * 60 :
+            totalTimeInSec = this.props.session_length * 60;
 
         timeRemainingInSec = minutes * 60 + seconds;
         timeElapsedInSec = totalTimeInSec - timeRemainingInSec;
@@ -197,6 +187,15 @@ export default class PomodoroClock extends Component {
             this.props.setIsPlaying(true);
             this.props.setIsStop(false);
             this.startTimer(this.props.timer)
+        }
+    }
+    componentDidUpdate(prevProps) {
+        if (this.props.session_length !== prevProps.session_length) {
+            this.props.setTimer({
+                minutes: this.props.session_length,
+                seconds: 0,
+                percentage: this.getTimeElapsedPercentage(this.props.session_length, 0)
+            });
         }
     }
 
